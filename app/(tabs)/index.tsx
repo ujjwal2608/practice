@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { Children, ReactElement, ReactNode } from 'react';
+import React, { Children, cloneElement, ReactElement, ReactNode } from 'react';
 import { Text, View } from 'react-native';
 
 const List = () => {
@@ -13,7 +13,10 @@ const List = () => {
 };
 
 const AppendList = ({ children }: { children: ReactElement }) => {//here the type must be react element
-  console.log("chldren",children?.props.children)
+  console.log("children",children)
+  const clonedElement = cloneElement(children)
+  console.log("clonedElement",clonedElement)
+  console.log("clonedElementProps",clonedElement.props)
   const listChildren = Children.toArray(children.props.children).slice(1); // Convert children to an array
   console.log(listChildren); // Now this correctly logs the <Text> elements inside List
 
@@ -24,11 +27,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex flex-1 flex-col gap-4 p-4 items-center justify-center">
       <AppendList>
-        <View>
-          <Text className="text-2xl">para1</Text>
-          <Text className="text-2xl">para2</Text>
-          <Text className="text-2xl">para3</Text>
-        </View>
+       <List/>
       </AppendList>
     </SafeAreaView>
   )
