@@ -1,34 +1,24 @@
+import React, { useState } from 'react';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { Children, cloneElement, ReactElement, ReactNode } from 'react';
-import { Text, View } from 'react-native';
 
-const List = () => {
+export default function App() {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0,x:0,y:0 });
+
   return (
-    <View>
-      <Text className="text-2xl">para1</Text>
-      <Text className="text-2xl">para2</Text>
-      <Text className="text-2xl">para3</Text>
+    <SafeAreaView>
+    <View
+      className='bg-red-400 h-32'
+      onLayout={(event) => {
+        const { width, height,x,y } = event.nativeEvent.layout;
+        setDimensions({ width, height,x,y });
+      }}
+    >
+      <Text>Width: {dimensions.width}</Text>
+      <Text>Height: {dimensions.height}</Text>
+      <Text>x: {dimensions.x}</Text>
+      <Text>y: {dimensions.y}</Text>
     </View>
-  );
-};
-
-const AppendList = ({ children }: { children: ReactElement }) => {//here the type must be react element
-  console.log("children",children)
-  const clonedElement = cloneElement(children)
-  console.log("clonedElement",clonedElement)
-  console.log("clonedElementProps",clonedElement.props)
-  const listChildren = Children.toArray(children.props.children).slice(1); // Convert children to an array
-  console.log(listChildren); // Now this correctly logs the <Text> elements inside List
-
-  return <>{listChildren}</>; // Render the children correctly
-};
-
-export default function HomeScreen() {
-  return (
-    <SafeAreaView className="flex flex-1 flex-col gap-4 p-4 items-center justify-center">
-      <AppendList>
-       <List/>
-      </AppendList>
     </SafeAreaView>
   )
 }
