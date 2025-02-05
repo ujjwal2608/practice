@@ -1,43 +1,35 @@
-import { memo, useCallback, useState } from "react";
-import { View, Text, Button } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { Children, ReactElement, ReactNode } from 'react';
+import { Text, View } from 'react-native';
 
-const listdata = [
-  { name: "Ujjwal", id: "1" },
-  { name: "Ujjwal1", id: "2" },
-  { name: "Ujjwal2", id: "3" },
-  { name: "Ujjwal3", id: "4" },
-  { name: "Ujjwal4", id: "5" },
-  { name: "Ujjwal5", id: "6" }
-]
-
-
-const Card = memo(({ listItem }: { listItem: { name: string; id: string } }) => {
-  console.log("render", listItem.id)
+const List = () => {
   return (
     <View>
-      <Text className="text-2xl">{listItem.name}</Text>
+      <Text className="text-2xl">para1</Text>
+      <Text className="text-2xl">para2</Text>
+      <Text className="text-2xl">para3</Text>
     </View>
-  )
-})
-export default function App() {
-  const [list, setList] = useState(listdata)
-  const handleDelete = (id: string) => {
-    setList((prev) => prev.filter((item) => item.id !== id));
-  }
+  );
+};
+
+const AppendList = ({ children }: { children: ReactElement }) => {//here the type must be react element
+  console.log("chldren",children?.props.children)
+  const listChildren = Children.toArray(children.props.children).slice(1); // Convert children to an array
+  console.log(listChildren); // Now this correctly logs the <Text> elements inside List
+
+  return <>{listChildren}</>; // Render the children correctly
+};
+
+export default function HomeScreen() {
   return (
-    <SafeAreaView className="flex-1">
-      <View>
-        {list.map((listItem) => (
-          <Card key={listItem.id} listItem={listItem} />//it should use both use  usememo as it have only value
-        ))}
-        <Button title="delete1" onPress={() => { handleDelete("1") }} />
-        <Button title="delete2" onPress={() => { handleDelete("2") }} />
-        <Button title="delete3" onPress={() => { handleDelete("3") }} />
-        <Button title="delete4" onPress={() => { handleDelete("4") }} />
-        <Button title="delete5" onPress={() => { handleDelete("5") }} />
-        <Button title="delete6" onPress={() => { handleDelete("6") }} />
-      </View>
+    <SafeAreaView className="flex flex-1 flex-col gap-4 p-4 items-center justify-center">
+      <AppendList>
+        <View>
+          <Text className="text-2xl">para1</Text>
+          <Text className="text-2xl">para2</Text>
+          <Text className="text-2xl">para3</Text>
+        </View>
+      </AppendList>
     </SafeAreaView>
   )
 }
