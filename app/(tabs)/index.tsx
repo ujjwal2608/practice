@@ -1,45 +1,43 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { cloneElement, ReactNode, useState } from 'react'
-import { Text, View } from 'react-native'
-interface Product {
-  title: string
-}
-const products = [
-  { title: "phone" },
-  { title: "tv" },
-  { title: "radio" },
+import { memo, useCallback, useState } from "react";
+import { View, Text, Button } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const listdata = [
+  { name: "Ujjwal", id: "1" },
+  { name: "Ujjwal1", id: "2" },
+  { name: "Ujjwal2", id: "3" },
+  { name: "Ujjwal3", id: "4" },
+  { name: "Ujjwal4", id: "5" },
+  { name: "Ujjwal5", id: "6" }
 ]
-const Item = ({ title, isMark }: { title: string, isMark?: boolean }) => {
-  return (
-    <View className={`px-3 py-2 border rounded-lg ${isMark ? 'bg-red-400 text-white' : ''}`}>
-      <Text className='text-2xl'>{title}</Text>
-    </View>
-  )
-}
-const List = ({ children }: { children: ReactNode }) => {
-  const [selectedIndex, setSelectedindex] = useState<number>(1)
-  console.log(selectedIndex)
-  return (
-    <View className='gap-2'>
-      {React.Children.map(children,(child, index) =>
-        cloneElement(child as React.ReactElement, {
-          isMark: index === selectedIndex,  // Now index is properly mapped
-        })
-      )}
-    </View>
-  )
-}
 
-export default function HomeScreen() {
+
+const Card = memo(({ listItem }: { listItem: { name: string; id: string } }) => {
+  console.log("render", listItem.id)
   return (
-    <SafeAreaView className="flex flex-1 flex-col gap-4 p-4 items-center justify-center">
+    <View>
+      <Text className="text-2xl">{listItem.name}</Text>
+    </View>
+  )
+})
+export default function App() {
+  const [list, setList] = useState(listdata)
+  const handleDelete = (id: string) => {
+    setList((prev) => prev.filter((item) => item.id !== id));
+  }
+  return (
+    <SafeAreaView className="flex-1">
       <View>
-        <List>
-          {products.map(product => <Item title={product.title} key={product.title} />)}
-        </List>
+        {list.map((listItem) => (
+          <Card key={listItem.id} listItem={listItem} />//it should use both use  usememo as it have only value
+        ))}
+        <Button title="delete1" onPress={() => { handleDelete("1") }} />
+        <Button title="delete2" onPress={() => { handleDelete("2") }} />
+        <Button title="delete3" onPress={() => { handleDelete("3") }} />
+        <Button title="delete4" onPress={() => { handleDelete("4") }} />
+        <Button title="delete5" onPress={() => { handleDelete("5") }} />
+        <Button title="delete6" onPress={() => { handleDelete("6") }} />
       </View>
-
     </SafeAreaView>
-  );
+  )
 }
-
