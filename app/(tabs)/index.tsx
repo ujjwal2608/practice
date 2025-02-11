@@ -12,7 +12,7 @@ const listdata = [
 ]
 
 
-const Card = memo(({ listItem, handleDelete }: { listItem: { name: string; id: string }; handleDelete: (id: string) => void }) => {
+const Card = memo(({ listItem }: { listItem: { name: string; id: string } }) => {
   console.log("render", listItem.id)
   return (
     <View>
@@ -29,7 +29,7 @@ export default function App() {
     <SafeAreaView className="flex-1">
       <View>
         {list.map((listItem) => (
-          <Card key={listItem.id} listItem={listItem} handleDelete={handleDelete} />//it should use both use callback and use memo it we are passinfg the both value and 
+          <Card key={listItem.id} listItem={listItem} />//it should use both use  usememo as it have only value
         ))}
         <Button title="delete1" onPress={() => { handleDelete("1") }} />
         <Button title="delete2" onPress={() => { handleDelete("2") }} />
