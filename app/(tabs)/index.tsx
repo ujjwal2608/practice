@@ -3,22 +3,23 @@ import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0,x:0,y:0 });
 
+
+const square = (fun:(a:number,b:number)=>number)=>{
+  return function (a:number,b:number){
+    return fun(a,b)*fun(a,b)
+  }
+}
+const multipy = (a:number,b:number)=>{
+  return a*b
+}
+
+const squareMultiply = square(multipy)
+const ans = squareMultiply(2,3)
+console.log(ans)
   return (
     <SafeAreaView>
-    <View
-      className='bg-red-400 h-32'
-      onLayout={(event) => {
-        const { width, height,x,y } = event.nativeEvent.layout;
-        setDimensions({ width, height,x,y });
-      }}
-    >
-      <Text>Width: {dimensions.width}</Text>
-      <Text>Height: {dimensions.height}</Text>
-      <Text>x: {dimensions.x}</Text>
-      <Text>y: {dimensions.y}</Text>
-    </View>
+   
     </SafeAreaView>
   )
 }
